@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+  mongodb:
+    image: mongo:${VERSION_MONGO:-3.2}
+    volumes:
+      - mongo_db:/data/db
+    networks:
+      - back_net
+  rabbitmq:
+    image: rabbitmq:${VERSION_RABBITMQ:-3.8}
+    networks:
+      - back_net
+  crawler:
+    image: vdaishi/crawler:${VERSION_POST:-1.0}
+    networks:
+      - back_net
+
+volumes:
+  mongo_db:
+
+networks:
+  back_net:
