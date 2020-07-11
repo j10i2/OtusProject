@@ -1,22 +1,61 @@
 version: '3.3'
 services:
-  mongodb:
-    image: mongo:${VERSION_MONGO:-3.2}
+  mongo_db:
+    image: ${MONGO_DB_IMAGE}
     volumes:
-      - mongo_db:/data/db
+      - ${MONGO_DB_VOL_NAME}:${MONGO_DB_VOL_DEST}
     networks:
-      - back_net
-  rabbitmq:
-    image: rabbitmq:${VERSION_RABBITMQ:-3.8}
+        back_net:
+            aliases:
+                - ${MONGO_DB_BACK_NET_ALIAS}
+        front_net:
+            aliases:
+                - ${MONGO_DB_FRONT_NET_ALIAS}
+  rabbit_mq:
+    depends_on:
+      - mongo_db
+    image: ${DOCKER_HUB_USERNAME}/${RABBIT_MQ_IMAGE}:${RABBIT_MQ_IMAGE_VERSION}
+    volumes:
+      - ${RABBIT_MQ_VOL_HOME_NAME}:${RABBIT_MQ_VOL_HOME_DEST}
+      - ${RABBIT_MQ_VOL_CONFIG_NAME}:${RABBIT_MQ_VOL_CONFIG_DEST}
+    ports:
+      - ${RABBIT_MQ_PORT}:${RABBIT_MQ_PORT}/tcp
+      - '8081:15672'
+      - '5672:5672'
     networks:
-      - back_net
+      back_net:
+        aliases:
+          - ${RABBIT_MQ_BACK_NET_ALIAS}
+    
   crawler:
     image: vdaishi/crawler:${VERSION_POST:-1.0}
     networks:
-      - back_net
+    - back_net
+  
+  fluentd:
+    image: ${DOCKER_HUB_USERNAME}/fluentd:${FLUENTD_VERSION}
+    ports:
+      - '24224:24224'
+      - '24224:24224/udp'
+    networks:
+      - ${NETWORK_FRONT_NET}
+      - ${NETWORK_BACK_NET}
 
 volumes:
-  mongo_db:
+  mq_rabbit_home:
+  mq_rabbit_config:
 
 networks:
   back_net:
+    driver: ${NETWORK_BACK_NET_DRIVER}
+    ipam:
+      driver: default
+      config:
+        - subnet: ${NETWORK_BACK_NET_SUBNET}
+  front_net:
+    driver: ${NETWORK_FRONT_NET_DRIVER}
+    ipam:
+      driver: default
+      config:
+        - subnet: ${NETWORK_FRONT_NET_SUBNET}
+
