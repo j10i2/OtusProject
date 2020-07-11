@@ -26,6 +26,11 @@ services:
       back_net:
         aliases:
           - ${RABBIT_MQ_BACK_NET_ALIAS}
+    
+  crawler:
+    image: vdaishi/crawler:${VERSION_POST:-1.0}
+    networks:
+    - back_net
   
   fluentd:
     image: ${DOCKER_HUB_USERNAME}/fluentd:${FLUENTD_VERSION}
@@ -53,3 +58,4 @@ networks:
       driver: default
       config:
         - subnet: ${NETWORK_FRONT_NET_SUBNET}
+
