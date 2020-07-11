@@ -11,7 +11,7 @@ services:
     networks:
       - back_net
   crawler:
-    image: vdaishi/crawler:${VERSION_POST:-1.0}
+    image: vdaishi/crawler:${VERSION_CRAWLER:-1.0}
     networks:
       - back_net
 
