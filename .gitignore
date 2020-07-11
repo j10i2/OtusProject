@@ -1,3 +1,10 @@
+*.tfvars
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+*.tfvars
+.terraform/
+*.retry
 *__pycache__
 *.coverage
 .vscode
