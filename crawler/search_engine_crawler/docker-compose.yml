@@ -14,6 +14,18 @@ services:
     image: vdaishi/crawler:${VERSION_CRAWLER:-1.0}
     networks:
       - back_net
+  crawler-ui:
+    image: j10i2/crawler-ui:latest
+    depends_on:
+      - mongodb
+    environment:
+     - FLASK_APP=ui.py
+     - MONGO=mongodb
+     - MONGO_PORT=27017
+    ports:
+      - 8000:8000/tcp
+    networks:
+      - back_net
 
 volumes:
   mongo_db:
