@@ -24,7 +24,7 @@ spec:
         name: app
         env:
         - name: MONGO
-          value: "mongo-service"
+          value: "mongo"
         - name: MONGO_PORT
           value: "27017"
         - name: RMQ_HOST
