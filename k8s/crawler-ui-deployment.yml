@@ -20,7 +20,7 @@
             component: ui
         spec:
           containers:
-          - image: j10i2/crawler-ui
+          - image: j10i2/crawler-ui:1.1
             name: ui
             env:
              - name: MONGO
