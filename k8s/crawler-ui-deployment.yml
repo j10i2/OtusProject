@@ -7,7 +7,7 @@
         app: crawler
         component: ui
     spec:
-      replicas: 1
+      replicas: 3
       selector:
         matchLabels:
           app: crawler
@@ -20,7 +20,7 @@
             component: ui
         spec:
           containers:
-          - image: j10i2/crawler_ui
+          - image: j10i2/crawler-ui
             name: ui
             env:
              - name: MONGO
