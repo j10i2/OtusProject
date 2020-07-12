@@ -1,3 +1,7 @@
+docker-compose.yml
+.env
+rabbitmq
+README.md
 *.tfvars
 *.tfstate
 *.tfstate.*.backup
@@ -5,3 +9,6 @@
 *.tfvars
 .terraform/
 *.retry
+*__pycache__
+*.coverage
+.vscode
