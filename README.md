@@ -1,38 +1,49 @@
 # Описание приложения и его архитектуры
 
-## Использовалось готовое микросервисное приложение от otus.
+## Использовалось готовое микросервисное приложение от Otus
+
+https://github.com/express42/search_engine_crawler
+
+https://github.com/express42/search_engine_ui
 
 ## В качестве инструмента IaC (Infrastructure as Code) для управления конфигурацией и инфраструктурой исполуется terraform.
 
-## Все, что имеет отношение к проекту хранится в Git.
+В процессе было сделано:
 
-#### Приложение от Otus
+1. Собраны докер образы, ссылки на DockerHub
 
-![Приложение от Otus]()
+https://hub.docker.com/repository/docker/j10i2/crawler-ui
 
-#### Автоматизированные процессы создания и управления платформой
+2. Первый варинт поднятия инфры через docker compose
 
-- [x] Ресурсы GCP
-- [x] Инфраструктура для CI/CD
-- [x] docker, docker-compose
+3. Написаны Terrafоrm-манифесты для gcp
 
-#### Использование практики IaC (Infrastructure as Code) для управления конфигурацией и инфраструктурой
+4. Второй вариант разворота инфры с помощью k8s
 
-- [x] Terraform
-- [x] Ansible
-- [x] Packer
+## Все, что имеет отношение к проекту хранится в Git
 
-#### Все, что имеет отношение к проекту хранится в Git
+## Первым делом логинимся в gcp
 
-- [x] Репо Github
+$ gcloud auth application-default login
 
-#### README по работе с репозиторием
+## Разворачиваем инфру 
 
-- [x] Описание приложения и его архитектуры
-- [x] How to start?
+1. Через docker compose
 
-#### CHANGELOG с описанием выполненной работы
+cd docker-compose
 
-- [x] Fully automated changelog generation
+docker-compose build
+
+docker-compose up
+
+2. Через Terrafоrm
+
+cd terraform
+
+terraform init
+
+terraform apply
+
+gcloud container clusters get-credentials awesome-k8s-cluster --zone us-central1-c --project <name-of-project>
 
 
