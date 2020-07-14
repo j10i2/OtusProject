@@ -1,7 +1,3 @@
-docker-compose.yml
-.env
-rabbitmq
-README.md
 *.tfvars
 *.tfstate
 *.tfstate.*.backup
