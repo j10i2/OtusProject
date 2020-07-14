@@ -1,0 +1,63 @@
+commit 16d8eb8fcfe2f8638e0e05fb03938cfc61032157 (HEAD -> k8s_test, origin/k8s_test)
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Sun Jul 12 22:45:25 2020 +0300
+
+    Cjange to  a mongo env variable
+
+commit a4f1b3913e1cdbd94416054c5f0d30229c9ae59c
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Sun Jul 12 19:13:55 2020 +0300
+
+    Changes for k8s manifests
+
+
+commit 8643a37b6fdeb84fa469d2c6e85502e1a6a1fce4
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Sun Jul 12 13:14:42 2020 +0300
+
+    K8s_test
+
+
+commit 3f4ebd73007320dcf13c817664d558d395b0dbc5 (HEAD -> test1, origin/test1)
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Sat Jul 11 21:23:51 2020 +0300
+
+    Terraform
+
+
+commit 8c000b8d0202b42b81efd544f4c2c8776172ab49 (HEAD -> k8s-ui, origin/k8s-ui)
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Sat Jul 11 19:23:32 2020 +0300
+
+    Added a k8s manifests for ui
+
+commit 5b36e56915e0ea94dd732a701d87fb8ce4665132 (origin/docker_ui, docker_ui)
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Fri Jul 10 16:25:12 2020 +0300
+
+    Changes in Dockerfile
+
+commit 721df3c2f18e042b1e90ed716e008f3910503681
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Wed Jul 8 18:03:32 2020 +0300
+
+    Changes in Dockerfile
+
+commit af28f8a56c9a68d3a150c1080798474eb7e50cb8
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Wed Jul 8 17:10:31 2020 +0300
+
+    Added a Dockerfile for ui service
+
+commit 7a96f30814da8ba882b8fb231afa1631ce47e4e5 (origin/infra-terraform, infra-terraform)
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Wed Jul 8 13:12:37 2020 +0300
+
+    Change datum in gitignore file to delete vars for terraform
+
+commit fe55b371c9be0a17e63c4dd4671feff5f8fe1223
+Author: j10i2 <pawelkosykh@gmail.com>
+Date:   Wed Jul 8 13:02:43 2020 +0300
+
+    Change datum in gitignore file to delete vars for terraform
+
