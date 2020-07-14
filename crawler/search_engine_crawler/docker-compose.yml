@@ -1,0 +1,73 @@
+version: '3.3'
+services:
+  mongo_db:
+    image: ${MONGO_DB_IMAGE}
+    volumes:
+      - ${MONGO_DB_VOL_NAME}:${MONGO_DB_VOL_DEST}
+    networks:
+        back_net:
+            aliases:
+                - ${MONGO_DB_BACK_NET_ALIAS}
+        front_net:
+            aliases:
+                - ${MONGO_DB_FRONT_NET_ALIAS}
+  rabbit_mq:
+    depends_on:
+      - mongo_db
+    image: ${DOCKER_HUB_USERNAME}/${RABBIT_MQ_IMAGE}:${RABBIT_MQ_IMAGE_VERSION}
+    volumes:
+      - ${RABBIT_MQ_VOL_HOME_NAME}:${RABBIT_MQ_VOL_HOME_DEST}
+      - ${RABBIT_MQ_VOL_CONFIG_NAME}:${RABBIT_MQ_VOL_CONFIG_DEST}
+    ports:
+      - ${RABBIT_MQ_PORT}:${RABBIT_MQ_PORT}/tcp
+      - '8081:15672'
+      - '5672:5672'
+    networks:
+      back_net:
+        aliases:
+          - ${RABBIT_MQ_BACK_NET_ALIAS}
+    
+  crawler:
+    image: vdaishi/crawler:${VERSION_CRAWLER:-1.0}
+    networks:
+      - back_net
+  crawler-ui:
+    image: j10i2/crawler-ui:latest
+    depends_on:
+      - mongodb
+    environment:
+     - FLASK_APP=ui.py
+     - MONGO=mongodb
+     - MONGO_PORT=27017
+    ports:
+      - 8000:8000/tcp
+    networks:
+    - back_net
+  
+  fluentd:
+    image: ${DOCKER_HUB_USERNAME}/fluentd:${FLUENTD_VERSION}
+    ports:
+      - '24224:24224'
+      - '24224:24224/udp'
+    networks:
+      - ${NETWORK_FRONT_NET}
+      - ${NETWORK_BACK_NET}
+
+volumes:
+  mq_rabbit_home:
+  mq_rabbit_config:
+
+networks:
+  back_net:
+    driver: ${NETWORK_BACK_NET_DRIVER}
+    ipam:
+      driver: default
+      config:
+        - subnet: ${NETWORK_BACK_NET_SUBNET}
+  front_net:
+    driver: ${NETWORK_FRONT_NET_DRIVER}
+    ipam:
+      driver: default
+      config:
+        - subnet: ${NETWORK_FRONT_NET_SUBNET}
+
