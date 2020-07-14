@@ -6,6 +6,8 @@ https://github.com/express42/search_engine_crawler
 
 https://github.com/express42/search_engine_ui
 
+![Приложение от Otus](https://github.com/Vdaishi/OtusProject/blob/master/Project_scheme.png)
+
 ## В качестве инструмента IaC (Infrastructure as Code) для управления конфигурацией и инфраструктурой используется terraform.
 
 В процессе было сделано:
