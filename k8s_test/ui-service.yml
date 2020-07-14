@@ -1,0 +1,19 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ui-service
+  labels:
+   app: crawler
+   component: ui
+
+spec:
+  type: NodePort
+  selector:
+    app: crawler
+    component: ui
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+
