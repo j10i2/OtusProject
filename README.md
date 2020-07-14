@@ -6,7 +6,7 @@ https://github.com/express42/search_engine_crawler
 
 https://github.com/express42/search_engine_ui
 
-## В качестве инструмента IaC (Infrastructure as Code) для управления конфигурацией и инфраструктурой исполуется terraform.
+## В качестве инструмента IaC (Infrastructure as Code) для управления конфигурацией и инфраструктурой используется terraform.
 
 В процессе было сделано:
 
@@ -14,7 +14,9 @@ https://github.com/express42/search_engine_ui
 
 https://hub.docker.com/repository/docker/j10i2/crawler-ui
 
-2. Первый варинт поднятия инфры через docker compose
+https://hub.docker.com/repository/docker/vdaishi/crawler
+
+2. Первый вариант поднятия инфры через docker compose
 
 3. Написаны Terrafоrm-манифесты для gcp
 
@@ -30,20 +32,20 @@ $ gcloud auth application-default login
 
 1. Через docker compose
 
-cd docker-compose
+   cd docker-compose
 
-docker-compose build
+   docker-compose build
 
-docker-compose up
+   docker-compose up
 
 2. Через Terrafоrm
 
-cd terraform
+   cd terraform
 
-terraform init
+   terraform init
 
-terraform apply
+   terraform apply
 
-gcloud container clusters get-credentials awesome-k8s-cluster --zone us-central1-c --project <name-of-project>
+   gcloud container clusters get-credentials awesome-k8s-cluster --zone us-central1-c --project name-of-project
 
 
