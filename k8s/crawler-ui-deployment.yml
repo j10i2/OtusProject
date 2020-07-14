@@ -1,0 +1,34 @@
+---
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: crawler-ui
+      labels:
+        app: crawler
+        component: ui
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: crawler
+          component: ui
+      template:
+        metadata:
+          name: ui-pod
+          labels:
+            app: crawler
+            component: ui
+        spec:
+          containers:
+          - image: j10i2/crawler-ui
+            name: ui
+            env:
+             - name: MONGO
+               value: "mongodb"
+             - name: MONGO_PORT
+               value: "27017"
+             - name: FLASK_APP
+               value: "/ui.py"
+            ports:
+             - containerPort: 8000
+        
