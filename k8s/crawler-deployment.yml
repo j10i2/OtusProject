@@ -20,7 +20,7 @@ spec:
         component: crawler
     spec:
       containers:
-      - image: vdaishi/crawler:1.0
+      - image: vdaishi/crawler:1.1
         name: app
         env:
         - name: MONGO
