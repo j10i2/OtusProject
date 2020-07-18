@@ -1,0 +1,6 @@
+service:
+    name: mongo-service
+    port: 27017
+deployment:
+    name: mongo
+    image: mongo:4.0.18

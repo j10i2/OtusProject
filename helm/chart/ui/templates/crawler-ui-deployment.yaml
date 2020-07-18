@@ -1,0 +1,35 @@
+---
+kind: Deployment
+apiVersion: v1
+  metadata:
+    name: ui-deployment
+    labels:
+      app: {{ .Values.deployment.name }}
+      component: ui
+     
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.name }}
+      component: ui
+  
+  template:
+    metadata:
+      name: ui
+      labels:
+        app: {{ .Values.deployment.name }}
+        component: ui
+
+    spec:
+      containers:
+      - image: {{ .Values.deployment.image }}
+        name: ui
+        env:
+          - name: MONGO
+            value: "mongo"
+          - name: MONGO_PORT
+            value: "27017"
+        ports:
+          - containerPort: {{ .Values.service.externalPort }}
+        

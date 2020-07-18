@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+spec:
+  type: LoadBalancer
+  selector:
+    app: ui
+  ports:
+  - port: {{ .Values.service.externalPort }}
+    targetPort: {{ .Values.service.internalPort }}
