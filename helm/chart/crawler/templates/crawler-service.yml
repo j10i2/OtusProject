@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  name: {{ .Values.service.name }}
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
-    app: ui
+    app: crawler
   ports:
   - port: {{ .Values.service.externalPort }}
-    targetPort: {{ .Values.service.internalPort }}
+    targetPort: {{ .Values.service.targetPort }}

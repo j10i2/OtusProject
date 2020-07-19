@@ -1,33 +1,25 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  name: crawler-deployment
   labels:
-    app: crawler
-    component: crawler
-    release: {{ .Release.Name }}
+    app: {{ .Values.deployment.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: crawler
-      component: crawler
-      release: {{ .Release.Name }}
+      app: {{ .Values.deployment.name }}
   template:
     metadata:
-      name: crawler
       labels:
-        app: crawler
-        component: crawler
-        release: {{ .Release.Name }}
+        app: {{ .Values.deployment.name }}
     spec:
       containers:
-      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        name: app
+      - name: {{ .Values.deployment.name }}
+        image: {{ .Values.deployment.image }}
         env:
         - name: MONGO
-          value: "mongo"
+          value: "mongo-service"
         - name: MONGO_PORT
           value: "27017"
         - name: RMQ_HOST
@@ -40,3 +32,5 @@ spec:
           value: "10"
         - name: EXCLUDE_URLS
           value: ".*github.com"
+        ports:
+        - containerPort: {{ .Values.service.externalPort }}

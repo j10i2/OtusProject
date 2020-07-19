@@ -1,35 +1,28 @@
----
+apiVersion: apps/v1
 kind: Deployment
-apiVersion: v1
-  metadata:
-    name: ui-deployment
-    labels:
-      app: {{ .Values.deployment.name }}
-      component: ui
-     
+metadata:
+  name: ui-deployment
+  labels:
+    app: {{ .Values.deployment.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: {{ .Values.deployment.name }}
-      component: ui
-  
   template:
     metadata:
-      name: ui
       labels:
         app: {{ .Values.deployment.name }}
-        component: ui
-
     spec:
       containers:
-      - image: {{ .Values.deployment.image }}
-        name: ui
+      - name: {{ .Values.deployment.name }}
+        image: {{ .Values.deployment.image }}
         env:
-          - name: MONGO
-            value: "mongo"
-          - name: MONGO_PORT
-            value: "27017"
+        - name: MONGO
+          value: "mongo-service"
+        - name: MONGO_PORT
+          value: "27017"
+        - name: FLASK_APP
+          value: "/ui.py"
         ports:
-          - containerPort: {{ .Values.service.externalPort }}
-        
+        - containerPort: {{ .Values.service.externalPort }}

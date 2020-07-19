@@ -1,8 +1,9 @@
 ---
 service:
-  internalPort: 9292
-  externalPort: 9292
+    externalPort: 8000
+    targetPort: 8000
+    name: crawler-service
 
-image:
-  repository: vdaishi/crawler
-  tag: 1.2
+deployment:
+    image: vdaishi/crawler:1.1
+    name: crawler

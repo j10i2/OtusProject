@@ -4,5 +4,6 @@ service:
   targetPort: 8000
   name: ui-service
 deployment:
-  image: j10i2/crawel-ui:1.0
+  image: j10i2/crawler-ui
+  tag: "latest"
   name: ui
