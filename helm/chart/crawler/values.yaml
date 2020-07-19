@@ -1,0 +1,9 @@
+---
+service:
+    externalPort: 8000
+    targetPort: 8000
+    name: crawler-service
+
+deployment:
+    image: vdaishi/crawler:1.1
+    name: crawler
