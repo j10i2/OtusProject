@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.service.name }}
+spec:
+  type: ClusterIP
+  selector:
+    app: crawler
+  ports:
+  - port: {{ .Values.service.externalPort }}
+    targetPort: {{ .Values.service.targetPort }}

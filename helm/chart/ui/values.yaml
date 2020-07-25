@@ -1,0 +1,9 @@
+---
+service:
+  externalPort: 8000
+  targetPort: 8000
+  name: ui-service
+deployment:
+  image: j10i2/crawler-ui
+  tag: "latest"
+  name: ui
