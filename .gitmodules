@@ -1,0 +1,3 @@
+[submodule "first"]
+	path = Gitlab-cI/first
+	url = http://gitlab-gitlab/j10i2/first.git
