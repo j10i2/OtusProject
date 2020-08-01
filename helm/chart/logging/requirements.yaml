@@ -1,0 +1,11 @@
+---
+dependencies:
+- name: logstash
+  version: "7.8.1"
+  repository: file://../logstash/
+- name: elasticsearch
+  version: "7.8.1"
+  repository: file://../elastic/elasticsearch/
+- name: kibana
+  version: "7.8.1"
+  repository: file://../kibana/

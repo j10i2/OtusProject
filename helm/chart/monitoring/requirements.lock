@@ -1,0 +1,9 @@
+dependencies:
+- name: prometheus
+  repository: file://../stable/prometheus/
+  version: 11.11.1
+- name: grafana
+  repository: file://../grafana/
+  version: 5.5.2
+digest: sha256:82e1381408be564c0c19f8d43959c1d65117de658432c67bcfba36713f4ea6cc
+generated: "2020-08-01T19:07:16.257461+03:00"
