@@ -1,0 +1,12 @@
+dependencies:
+- name: logstash
+  repository: file://../logstash/
+  version: 7.8.1
+- name: elasticsearch
+  repository: file://../elastic/elasticsearch/
+  version: 7.8.1
+- name: kibana
+  repository: file://../kibana/
+  version: 7.8.1
+digest: sha256:06241c42eac7b9a9d19c80ddae053600faf2980f9e96ac9e926cb2646c9757b2
+generated: "2020-08-01T16:22:09.045841+03:00"
