@@ -923,7 +923,7 @@ server:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 9091
+    servicePort: 9090
     sessionAffinity: None
     type: LoadBalancer
 
