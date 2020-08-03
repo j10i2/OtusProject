@@ -235,7 +235,7 @@ lifecycle: {}
   #     command: ["/bin/sh", "-c", "echo Hello from the postStart handler > /usr/share/message"]
 
 service: 
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: beats
       port: 5044
