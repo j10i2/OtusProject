@@ -11,5 +11,8 @@ dependencies:
 - name: mongo
   repository: file://..//mongo
   version: 1.0.0
-digest: sha256:d3a7bfd649f30c026e23a37cd5111d3948b711a641b6a06e7bec27a8907e78b2
-generated: "2020-07-25T14:49:25.74744487+03:00"
+- name: mongodb-exporter
+  repository: file://../mongodb_exporter
+  version: 1.0.0
+digest: sha256:2aaf586696b48112c904b2767c4af09dc8d840988eef0bfc7dbc8e634e6967a5
+generated: "2020-08-02T19:49:00.079612+03:00"

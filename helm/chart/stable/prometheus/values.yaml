@@ -311,7 +311,6 @@ alertmanager:
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
     servicePort: 80
-    nodePort: 30000
     sessionAffinity: None
     type: NodePort
 
@@ -540,7 +539,7 @@ nodeExporter:
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
     servicePort: 9100
-    type: LoadBalancer
+    type: NodePort
 
 server:
   ## Prometheus server container name
@@ -924,7 +923,7 @@ server:
 
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
-    servicePort: 80
+    servicePort: 9090
     sessionAffinity: None
     type: LoadBalancer
 
@@ -1145,19 +1144,25 @@ pushgateway:
     ##
     subPath: ""
 
-
 ## alertmanager ConfigMap entries
 ##
 alertmanagerFiles:
   alertmanager.yml:
-    global: {}
-      # slack_api_url: ''
+    global:
+      slack_api_url: devops-team-otus.slack.com
 
     receivers:
-      - name: default-receiver
-        # slack_configs:
-        #  - channel: '@you'
-        #    send_resolved: true
+    - name: 'default'
+      slack_configs:
+      - channel: '#adsasdas'
+      email_configs:
+      - to: asdasdaf123@maasdasil.ru
+        smarthost: smtp.yandex.ru:465
+        from: 123123asd@yaasdndex.ru
+        auth_username: mailhere@mail.py
+        auth_password: setpasswordhere
+      webhook_configs:
+      - url: http://mgmt-host-default-001:9099/alerts
 
     route:
       group_wait: 10s
@@ -1168,23 +1173,44 @@ alertmanagerFiles:
 ## Prometheus server ConfigMap entries
 ##
 serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: NodeAlerts
+        rules:
+          - alert: NodeDown
+            expr: up{job="kubernetes-nodes"} == 0
+            for: 1m
+            labels:
+              severity: page
+            annotations:
+              description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute'
+              summary: 'Instance {{ $labels.instance }} down'
+      - name: APIServerAlerts
+        rules:
+          - alert: APIServerDown
+            expr: up{job="kubernetes-apiservers"} == 0
+            for: 1m
+            labels:
+              severity: page
+            annotations:
+              description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute'
+              summary: 'Instance {{ $labels.instance }} down'
 
-  ## Alerts configuration
-  ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
-  alerting_rules.yml: {}
-  # groups:
-  #   - name: Instances
-  #     rules:
-  #       - alert: InstanceDown
-  #         expr: up == 0
-  #         for: 5m
-  #         labels:
-  #           severity: page
-  #         annotations:
-  #           description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes.'
-  #           summary: 'Instance {{ $labels.instance }} down'
-  ## DEPRECATED DEFAULT VALUE, unless explicitly naming your files, please use alerting_rules.yml
-  alerts: {}
+  rules: {}
+
+  prometheus.yml:
+    rule_files:
+      - /etc/config/rules
+      - /etc/config/alerts
+
+    global:
+      scrape_interval: 30s
+
+    scrape_configs:
+      - job_name: prometheus
+        static_configs:
+          - targets:
+            - localhost:9090
 
   ## Records configuration
   ## Ref: https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/
@@ -1542,76 +1568,58 @@ serverFiles:
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: kubernetes_pod_name
-      - job_name: 'search-engine-production'
-        kubernetes_sd_configs:
-          - role: endpoints
-        relabel_configs:
-          - action: labelmap
-            regex: __meta_kubernetes_service_label_(.+)
-          - source_labels: [__meta_kubernetes_service_label_app, __meta_kubernetes_namespace]
-            action: keep
-            regex: search_engine;(production|staging)+
-          - source_labels: [__meta_kubernetes_namespace]
-            target_label: kubernetes_namespace
-          - source_labels: [__meta_kubernetes_service_name]
-            target_label: kubernetes_name
-
+      
       - job_name: 'crawler-endpoints'
         kubernetes_sd_configs:
           - role: endpoints
         relabel_configs:
-          - source_labels: [__meta_kubernetes_service_label_component]
+          - source_labels: [__meta_kubernetes_pod_label_app]
             action: keep
             regex: crawler
-          - action: labelmap
+          - action: labelmap 
             regex: __meta_kubernetes_service_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
+            action: replace
             target_label: kubernetes_namespace
-          - source_labels: [__meta_kubernetes_service_name]
-            target_label: kubernetes_name
+
+      - job_name: 'mongo-endpoints'
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_label_component]
+            action: keep
+            regex: mongodb_exporter
+          - action: labelmap 
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
 
       - job_name: 'ui-endpoints'
         kubernetes_sd_configs:
           - role: endpoints
         relabel_configs:
-          - source_labels: [__meta_kubernetes_service_label_component]
+          - source_labels: [__meta_kubernetes_pod_label_app]
             action: keep
             regex: ui
-          - action: labelmap
+          - action: labelmap 
             regex: __meta_kubernetes_service_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
+            action: replace
             target_label: kubernetes_namespace
-          - source_labels: [__meta_kubernetes_service_name]
-            target_label: kubernetes_name
 
       - job_name: 'rabbitmq-endpoints'
         kubernetes_sd_configs:
           - role: endpoints
-        metrics_path: /api/metrics
         relabel_configs:
-          - action: labelmap
-            regex: __meta_kubernetes_service_label_(.+)
-          - source_labels: [__meta_kubernetes_service_label_app, __meta_kubernetes_namespace, __meta_kubernetes_pod_container_port_name]
+          - source_labels: [__meta_kubernetes_endpoints_name]
             action: keep
-            regex: search-engine-(production|staging)-rabbitmq;(production|staging)+;stats
-          - source_labels: [__meta_kubernetes_namespace]
-            target_label: kubernetes_namespace
-          - source_labels: [__meta_kubernetes_service_name]
-            target_label: kubernetes_name
+            regex: rabbit-service
+        
 
-      - job_name: 'mongodb-endpoints'
-        kubernetes_sd_configs:
-          - role: endpoints
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_service_label_component]
-            action: keep
-            regex: mongodb_exporter
-          - action: labelmap
-            regex: __meta_kubernetes_service_label_(.+)
-          - source_labels: [__meta_kubernetes_namespace]
-            target_label: kubernetes_namespace
-          - source_labels: [__meta_kubernetes_service_name]
-            target_label: kubernetes_name
+
+
+
 
 # adds additional scrape configs to prometheus.yml
 # must be a string so you have to add a | after extraScrapeConfigs:
