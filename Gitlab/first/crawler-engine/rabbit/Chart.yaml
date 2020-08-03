@@ -1,0 +1,7 @@
+name: rabbit
+version: 1.0.0
+description: OTUS project rabbit file
+maintainers:
+- name: Someone
+  email: my@mail.com
+appVersion: 1.0

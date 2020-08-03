@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crawler-deployment
+  labels:
+    app: {{ .Values.deployment.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.name }}
+    spec:
+      containers:
+      - name: {{ .Values.deployment.name }}
+        image: {{ .Values.deployment.image }}
+        env:
+        - name: MONGO
+          value: "mongo-service"
+        - name: MONGO_PORT
+          value: "27017"
+        - name: RMQ_HOST
+          value: "rabbit-service"
+        - name: RMQ_USERNAME
+          value: "guest"
+        - name: RMQ_PASSWORD
+          value: "guest"
+        - name: CHECK_INTERVAL
+          value: "10"
+        - name: EXCLUDE_URLS
+          value: ".*github.com"
+        ports:
+        - containerPort: {{ .Values.service.externalPort }}
