@@ -1,6 +1,9 @@
-# Описание приложения и его архитектуры
+# проект по курсу DevOps: практики и инструменты
 
-## Использовалось готовое микросервисное приложение от Otus
+## Описание приложения и его архитектуры
+
+### Приложение
+В данном проекте рассматривается работа и развертывание приложения от команды  OTUS.ru
 
 https://github.com/express42/search_engine_crawler
 
@@ -8,62 +11,90 @@ https://github.com/express42/search_engine_ui
 
 ![Приложение от Otus](https://github.com/Vdaishi/OtusProject/blob/master/Project_scheme.png)
 
-## В качестве инструмента IaC (Infrastructure as Code) для управления конфигурацией и инфраструктурой используется terraform.
+### Развертывание архитектуры
+Для локального развертывания приложения используются контейнеры `Docker`.
+Для развертывания в `GCP` используется `Kubernetes`.
+
+### Краткое содержание
 
 В процессе было сделано:
 
-1. Собраны докер образы, ссылки на DockerHub
+1. Собраны докер образы приложения, настроен файл развертывания приложения через Docker-Compose; 
+   ссылки на DockerHub:
 
-https://hub.docker.com/repository/docker/j10i2/crawler-ui
+      1. https://hub.docker.com/repository/docker/j10i2/crawler-ui
 
-https://hub.docker.com/repository/docker/vdaishi/crawler
+      2. https://hub.docker.com/repository/docker/vdaishi/crawler
 
-2. Первый вариант поднятия инфры через docker compose
+2. Реализовано развертывание кластера `K8S` для облачного развертывания инфраструктуры;
+3. Настроено развертывание приложения в `K8S` с помощью `helm`;
+4. Настроен CI\CD для развертывания приложения на `Gitlab`
+5. Настроено логирование контейнеров кластера с помощью `ELK` стека и `Filebeat`
+6. Настроен мониторинг контейнеров кластера с помощью `Prometheus` с визуализацией в `Grafana`
 
-3. Написаны Terrafоrm-манифесты для gcp
+## Описание проекта
 
-4. Второй вариант разворота инфры с помощью k8s
-
-## Все, что имеет отношение к проекту хранится в Git
-
-## Первым делом логинимся в gcp
-
-$ gcloud auth application-default login
-
-## Разворачиваем инфру 
-
-1. Через docker compose
-
-   cd docker-compose
-
-   docker-compose build
-
-   docker-compose up
-
-2. Через Terrafоrm
-
-   cd terraform
-
-   terraform init
-
-   terraform apply
-
-   gcloud container clusters get-credentials awesome-k8s-cluster --zone us-central1-c --project name-of-project
+Для 
 
 
-NOTES:
-1. Get your 'admin' user password by running:
 
-   kubectl get secret --namespace default grfana-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+## Установка приложения локально
 
-2. The Grafana server can be accessed via port 80 on the following DNS name from within your cluster:
+Приложение готово к установке с помощью `Docker-compose`
 
-   grfana-grafana.default.svc.cluster.local
+1. Локально с помощью 
+   ```bash
+      docker-compose build
 
-   Get the Grafana URL to visit by running these commands in the same shell:
+      docker-compose up
+   ```
+2. Через `Terrafоrm`
+   1. Развертывание кластера `K8S`
+      ```bash
+      cd terraform
 
-     export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grfana" -o jsonpath="{.items[0].metadata.name}")
-     kubectl --namespace default port-forward $POD_NAME 3000
+      gcloud auth application-default login
 
-3. Login with the password from step 1 and the username: admin
+      terraform init
 
+      terraform apply
+
+      gcloud container clusters get-credentials awesome-k8s-cluster --zone us-central1-c --project name-of-project
+      ```
+   2. Развертывание Gitlab
+      ```bash
+      helm install gitlab ./helm/chart/gitlab-omnibus
+      ```
+      В рамках Gitlab реализовано тестирование и развертывание приложения а так же удаление приложения;
+   
+   3. Развертывание приложения 
+      ```
+      helm install crawler ./helm/chart/crawler-engine
+      ```
+      Приложение парсит сайт и через `UI` позволяет произвести поиск фраз , которые есть на сайте. 
+      Приложение использует базу данных `MongoDB` и менеджер очередей `RabbitMQ`
+
+   4. Мониторинг приложения
+      Установка мониторинга
+      ```
+      helm install monitoring ./helm/chart/monitoring
+      ```
+      
+      Мониторинг получает информацию от подов и нод кластера, 
+      Для работы Алертинга необходимо настроить данные в файле `./helm/chart/stable/prometheus/values.yaml` для файла `alertmanager.yml`
+
+      Для доступа к Grafana необходимо получить расшифрованный ключ
+      ```bash
+         kubectl get secret --namespace default monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+      ```
+
+   5. Логирование приложения
+      Установка логирования
+      
+      ```bash
+      helm install logging ./helm/chart/logging
+      ```
+
+      Логирование включает в себя информацию из всех подов кластера с помощью Filebeat, отсылая данные в Logstash.
+
+   
