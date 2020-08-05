@@ -15,6 +15,10 @@ https://github.com/express42/search_engine_ui
 Для локального развертывания приложения используются контейнеры `Docker`.
 Для развертывания в `GCP` используется `Kubernetes`.
 
+### ScreenCast
+
+https://yadi.sk/i/zrJn4VStXX1khQ
+
 ### Краткое содержание
 
 В процессе было сделано:
